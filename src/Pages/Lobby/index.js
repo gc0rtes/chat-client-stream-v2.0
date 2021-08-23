@@ -18,34 +18,22 @@ const chatClient = StreamChat.getInstance(API_KEY);
 export default function Lobby({ connectUser }) {
   const userId = connectUser.me.id;
   const [channels, setChannels] = useState(null);
-  const [newChannel, setNewChannel] = useState(null);
-  // const [foundChannel, setFoundChannel] = useState(null)
+  const [channelId, setChannelId] = useState("general");
+  const [channelType, setChannelType] = useState("livestream");
 
   useEffect(() => {
+    // The default queryChannels API returns channels and starts watching them.
+    // There is no need to also use channel.watch on the channels returned from queryChannels
     queryChannels(chatClient, setChannels, userId);
   }, []);
 
-  useEffect(() => {}, [newChannel]);
-
-  // //find the channel acording newChannel selected
-  // const findChannel = (channels) => {
-  //    channels.find(
-  //     (element) =>
-  //       element.type === newChannel.channelType &&
-  //       element.id === newChannel.channelId
-  //   );
-  // }
-
-  //initialize a channel dynamically
-  const channel = chatClient.channel("livestream", "general");
-
-  //every time thath a newChannel is clicked
-  useEffect(() => {}, [newChannel]);
+  // Initialize a channel dynamically
+  const channel = chatClient.channel(channelType, channelId);
 
   console.log("what is channels", channels);
-  console.log("what is channel", channel);
-  console.log("what is newChannel", newChannel);
-  // console.log("what is foundChannel", foundChannel);
+  // console.log("what is channel", channel);
+  // console.log("what is channelId", channelId);
+  // console.log("what is channelType", channelType);
 
   return (
     <div className="container border my-3">
@@ -53,9 +41,13 @@ export default function Lobby({ connectUser }) {
       <a href="/">Logout</a> {/* It makes refresh the page */}
       <div className="row border" style={{ height: "85vh" }}>
         {channels && (
-          <ChatList channels={channels} setNewChannel={setNewChannel} />
+          <ChatList
+            channels={channels}
+            setChannelId={setChannelId}
+            setChannelType={setChannelType}
+          />
         )}
-        <ChatBox />
+        <ChatBox channel={channel} userId={userId} />
       </div>
     </div>
   );
