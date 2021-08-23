@@ -15,7 +15,7 @@ export async function getTokenAndConnectUser(userId, setConnectUser, setError) {
       { id: userId },
       response.data.token
     );
-    console.log("what is connectUser?", connectUser);
+    // console.log("what is connectUser?", connectUser);
     setConnectUser(connectUser);
     // return response.data.token;
   } catch (error) {

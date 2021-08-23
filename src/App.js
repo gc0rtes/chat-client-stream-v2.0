@@ -5,7 +5,7 @@ import Login from "./Pages/Login";
 
 function App() {
   const [connectUser, setConnectUser] = useState(null);
-  console.log("what is connectUser?", connectUser);
+  // console.log("what is connectUser?", connectUser);
   return connectUser ? (
     <Lobby connectUser={connectUser} />
   ) : (
