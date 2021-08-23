@@ -5,18 +5,18 @@ const PORT = process.env.REACT_APP_PORT;
 const API_KEY = process.env.REACT_APP_API_KEY;
 const client = StreamChat.getInstance(API_KEY);
 
-export async function getTokenAndConnectUser(userId, setChatClient, setError) {
+export async function getTokenAndConnectUser(userId, setConnectUser, setError) {
   try {
     const response = await axios.get(
       `http://localhost:${PORT}/token?userId=${userId}`
     );
 
-    const chatClient = await client.connectUser(
+    const connectUser = await client.connectUser(
       { id: userId },
       response.data.token
     );
-    console.log("what is chatClient?", chatClient);
-    setChatClient(chatClient);
+    console.log("what is connectUser?", connectUser);
+    setConnectUser(connectUser);
     // return response.data.token;
   } catch (error) {
     // console.error("fetch token failed", error);

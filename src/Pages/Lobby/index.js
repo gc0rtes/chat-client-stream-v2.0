@@ -1,5 +1,5 @@
-export default function Lobby({ chatClient }) {
-  const userId = chatClient.me.id;
+export default function Lobby({ connectUser }) {
+  const userId = connectUser.me.id;
 
   return (
     <div>

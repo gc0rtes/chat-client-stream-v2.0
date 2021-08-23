@@ -4,13 +4,13 @@ import { useState } from "react";
 // Functions
 import { getTokenAndConnectUser } from "../../Components/getTokenAndConnectUser";
 
-export default function Login({ setChatClient }) {
+export default function Login({ setConnectUser }) {
   const [userId, setUserId] = useState("");
   const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    getTokenAndConnectUser(userId, setChatClient, setError);
+    getTokenAndConnectUser(userId, setConnectUser, setError);
   };
 
   return (

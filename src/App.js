@@ -4,12 +4,12 @@ import Lobby from "./Pages/Lobby";
 import Login from "./Pages/Login";
 
 function App() {
-  const [chatClient, setChatClient] = useState(null);
-  console.log("what is chatClient?", chatClient);
-  return chatClient ? (
-    <Lobby chatClient={chatClient} />
+  const [connectUser, setConnectUser] = useState(null);
+  console.log("what is connectUser?", connectUser);
+  return connectUser ? (
+    <Lobby connectUser={connectUser} />
   ) : (
-    <Login setChatClient={setChatClient} />
+    <Login setConnectUser={setConnectUser} />
   );
 }
 
