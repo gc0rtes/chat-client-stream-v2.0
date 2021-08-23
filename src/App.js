@@ -1,14 +1,15 @@
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { useState } from "react";
 
 import Lobby from "./Pages/Lobby";
 import Login from "./Pages/Login";
 
 function App() {
-  return (
-    <Router>
-      <Route exact path="/" component={Login} />
-      <Route path="/lobby" component={Lobby} />
-    </Router>
+  const [chatClient, setChatClient] = useState(null);
+  console.log("what is chatClient?", chatClient);
+  return chatClient ? (
+    <Lobby chatClient={chatClient} />
+  ) : (
+    <Login setChatClient={setChatClient} />
   );
 }
 

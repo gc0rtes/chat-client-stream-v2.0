@@ -1,26 +1,40 @@
 import "./index.css";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
-export default function Login() {
-  const [userId, setUserId] = useState(null);
+// Functions
+import { getTokenAndConnectUser } from "../../Components/getTokenAndConnectUser";
+
+export default function Login({ setChatClient }) {
+  const [userId, setUserId] = useState("");
+  const [error, setError] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    getTokenAndConnectUser(userId, setChatClient, setError);
+  };
+
   return (
-    <div className="vertical-horizontal-center">
-      <form onSubmit={null}>
-        <input
-          type="text"
-          placeholder="Enter user ID"
-          onChange={(e) => setUserId(e.target.value)}
-        />
-        <Link
-          onClick={(e) => (!userId ? e.preventDefault() : null)}
-          to={`/lobby`}
-        >
-          <button className={"button mt-20"} type="submit">
+    <div>
+      <div className="vertical-horizontal-center">
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Enter user ID"
+            className="form-control"
+            onChange={(e) => setUserId(e.target.value)}
+          />
+          {/* <button className="btn btn-primary" type="submit">
             Sign In
-          </button>
-        </Link>
-      </form>
+          </button> */}
+        </form>
+      </div>
+      <div>
+        {error ? (
+          <div className="alert alert-danger text-center" role="alert">
+            {error}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
