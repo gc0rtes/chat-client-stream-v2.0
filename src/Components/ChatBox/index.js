@@ -1,5 +1,8 @@
+import "./index.css";
 import { useState } from "react";
 import moment from "moment";
+import ScrollToBottom from "react-scroll-to-bottom";
+
 export default function ChatBox({ channel, userId, channelMessages }) {
   const [sendMessage, setSendMessage] = useState("");
 
@@ -22,8 +25,9 @@ export default function ChatBox({ channel, userId, channelMessages }) {
   // console.log("what is channelMessages?", channelMessages);
   // console.log("channel.state.message", channel.state.messages);
   return (
-    <div className="col-9 border">
-      <div className="border  p-2" style={{ height: "93%" }}>
+    <div className="col-9 border overflow">
+      <ScrollToBottom className="border-red  p-2 height overflow">
+        {/* <div className="border  p-2" style={{ height: "93%" }}> */}
         <h3>Channel #{channel.id}</h3>
         {/* Load old messages */}
         {channelMessages.map((message, index) => (
@@ -41,7 +45,8 @@ export default function ChatBox({ channel, userId, channelMessages }) {
             </div>
           </div>
         ))}
-      </div>
+        {/* </div> */}
+      </ScrollToBottom>
       <div className="border py-1 row">
         <div className="col-9">
           <form onSubmit={handleSubmit}>
