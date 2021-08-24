@@ -1,21 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import moment from "moment";
-export default function ChatBox({ channel, userId }) {
+export default function ChatBox({ channel, userId, channelMessages }) {
   const [sendMessage, setSendMessage] = useState("");
-  const [newMessage, setNewMessage] = useState("");
-
-  // Start to listen Events on channel
-  useEffect(() => {
-    channel.on(
-      "message.new",
-      (event) => {
-        setNewMessage(event.message);
-        console.log("what is event.message?", event.message);
-        // console.log("channel.state", channel.state);
-      },
-      []
-    );
-  });
 
   // Function for sending messages
   const toSendMessage = async (message) => {
@@ -28,17 +14,19 @@ export default function ChatBox({ channel, userId }) {
 
   // Function to handle submit form
   const handleSubmit = (e) => {
-    e.preventDefault(); // prevent browser to refresh when click on button
+    e.preventDefault();
     toSendMessage(sendMessage);
     setSendMessage("");
   };
 
+  // console.log("what is channelMessages?", channelMessages);
+  // console.log("channel.state.message", channel.state.messages);
   return (
     <div className="col-9 border">
       <div className="border  p-2" style={{ height: "93%" }}>
         <h3>Channel #{channel.id}</h3>
         {/* Load old messages */}
-        {channel.state.messages.map((message, index) => (
+        {channelMessages.map((message, index) => (
           // message.user.id === userId ? setToggleAlign("text-left") :  setToggleAlign("text-right");
           <div
             key={index}
@@ -53,14 +41,6 @@ export default function ChatBox({ channel, userId }) {
             </div>
           </div>
         ))}
-        {/* Load new messages */}
-        {/* <div
-          className={newMessage.user.id === userId ? "text-right" : "text-left"}
-        >
-          {`${newMessage.user.id} > ${newMessage.text} (${moment(
-            newMessage.created_at
-          ).format("ll")} at ${moment(newMessage.created_at).format("HH:mm")})`}
-        </div> */}
       </div>
       <div className="border py-1 row">
         <div className="col-9">

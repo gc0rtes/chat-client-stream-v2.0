@@ -18,8 +18,12 @@ const chatClient = StreamChat.getInstance(API_KEY);
 export default function Lobby({ connectUser }) {
   const userId = connectUser.me.id;
   const [channels, setChannels] = useState(null);
+  const [channelMessages, setChannelMessages] = useState(null);
   const [channelId, setChannelId] = useState("general");
   const [channelType, setChannelType] = useState("livestream");
+
+  // Initialize a channel dynamically
+  const channel = chatClient.channel(channelType, channelId);
 
   useEffect(() => {
     // The default queryChannels API returns channels and starts watching them.
@@ -27,11 +31,18 @@ export default function Lobby({ connectUser }) {
     queryChannels(chatClient, setChannels, userId);
   }, []);
 
-  // Initialize a channel dynamically
-  const channel = chatClient.channel(channelType, channelId);
+  useEffect(() => {
+    // I want to make sure the channel.on is listening whenever the user changes the channel that is why channel.on is inside this useEffect
+    // So, everytime new message arrives set the channelMessages > it will send a new props to child ChatBox and generate a new render with the new message
+    channel.on("message.new", (event) => {
+      setChannelMessages(channel.state.messages);
+    });
+    setChannelMessages(channel.state.messages);
+  }, [channels, channelId]); // Monitoring the "channels" to render at first render, and "channelId" to render and listen on.channel every time channel changes
 
+  console.log("what is channel", channel);
   console.log("what is channels", channels);
-  // console.log("what is channel", channel);
+  console.log("what is channel.state.messages", channel.state.messages);
   // console.log("what is channelId", channelId);
   // console.log("what is channelType", channelType);
 
@@ -47,7 +58,13 @@ export default function Lobby({ connectUser }) {
             setChannelType={setChannelType}
           />
         )}
-        <ChatBox channel={channel} userId={userId} />
+        {channel && channels && (
+          <ChatBox
+            channel={channel}
+            userId={userId}
+            channelMessages={channelMessages}
+          />
+        )}
       </div>
     </div>
   );
