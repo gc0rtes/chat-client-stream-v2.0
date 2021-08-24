@@ -32,13 +32,32 @@ export default function Lobby({ connectUser }) {
   }, []);
 
   useEffect(() => {
-    // I want to make sure the channel.on is listening whenever the user changes the channel that is why channel.on is inside this useEffect
-    // So, everytime new message arrives set the channelMessages > it will send a new props to child ChatBox and generate a new render with the new message
-    channel.on("message.new", (event) => {
-      setChannelMessages(channel.state.messages);
-    });
+    const setMessagesAndWatchChannel = async () => {
+      // Calling channel.watch() allows you to listen for events when anything in the channel changes
+      try {
+        const watch = await channel.watch();
+        setChannelMessages(channel.state.messages);
+        console.log("what is watch", watch);
+      } catch (error) {
+        console.log("watch channel failed >", error);
+      }
+    };
+
+    setMessagesAndWatchChannel();
+  }, [channels, channelId]);
+
+  channel.on("message.new", () => {
     setChannelMessages(channel.state.messages);
-  }, [channels, channelId]); // Monitoring the "channels" to render at first render, and "channelId" to render and listen on.channel every time channel changes
+  });
+
+  // useEffect(() => {
+  //   // I want to make sure the channel.on is listening whenever the user changes the channel that is why channel.on is inside this useEffect
+  //   // So, everytime new message arrives set the channelMessages > it will send a new props to child ChatBox and generate a new render with the new message
+  //   channel.on("message.new", (event) => {
+  //     setChannelMessages(channel.state.messages);
+  //   });
+  //   setChannelMessages(channel.state.messages);
+  // }, [channels, channelId]); // Monitoring the "channels" to render at first render, and "channelId" to render and listen on.channel every time channel changes
 
   console.log("what is channel", channel);
   console.log("what is channels", channels);
