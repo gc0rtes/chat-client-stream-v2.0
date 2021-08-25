@@ -30,11 +30,6 @@ export default function Lobby({ connectUser }) {
   // Initialize a channel dynamically
   const channel = chatClient.channel(channelType, channelId);
 
-  console.log("what is channels", channels);
-  // console.log("what is channel", channel);
-  // console.log("what is channelId", channelId);
-  // console.log("what is channelType", channelType);
-
   return (
     <div className="container border my-3">
       <h3>Hello {userId}</h3>
@@ -47,7 +42,9 @@ export default function Lobby({ connectUser }) {
             setChannelType={setChannelType}
           />
         )}
-        <ChatBox channel={channel} userId={userId} />
+        {channel.state.messages[0] && (
+          <ChatBox channel={channel} userId={userId} />
+        )}
       </div>
     </div>
   );
