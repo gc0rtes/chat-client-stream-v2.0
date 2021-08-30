@@ -1,25 +1,24 @@
 import { useState, useEffect } from "react";
 import moment from "moment";
+
 export default function ChatBox({ channel, userId }) {
   const [sendMessage, setSendMessage] = useState("");
   const [messages, setMessages] = useState(channel.state.messages);
 
-  // Set messages at first render and every time channel changes
+  // Set messages at first render and every time channel changes.
   useEffect(() => {
     setMessages(channel.state.messages);
-    console.log("setmessage/channel called");
   }, [channel]);
 
-  // Start to listen Events (new.message) on channel
+  // Start to listen Events (new.message) on channel.
+  // It doesn't makes an API call.
   useEffect(() => {
     channel.on("message.new", (event) => {
-      // console.log("what is event.message?", event.message);
       setMessages([...messages, event.message]);
-      // console.log("channel.state", channel.state);
     });
-  }, []);
+  }, [messages]); // monitoring messages to run it everytime it changes.
 
-  // Function for sending messages
+  // Function to sending messages. It makes an API call.
   const toSendMessage = async (message) => {
     try {
       await channel.sendMessage({ text: message });
@@ -28,18 +27,19 @@ export default function ChatBox({ channel, userId }) {
     }
   };
 
-  // Function to handle submit form
+  // Function to handle submit form.
   const handleSubmit = (e) => {
-    e.preventDefault(); // prevent browser to refresh when click on button
+    e.preventDefault();
     toSendMessage(sendMessage);
     setSendMessage("");
   };
 
   return (
     <div className="col-9 border">
+      {/* Load messages box*/}
       <div className="border  p-2" style={{ height: "93%" }}>
         <h3>Channel #{channel.id}</h3>
-        {/* Load messages box*/}
+
         {messages.map((message, index) => (
           <div
             key={index}
@@ -55,9 +55,10 @@ export default function ChatBox({ channel, userId }) {
           </div>
         ))}
       </div>
+
       {/* Send message input */}
       <div className="border py-1 row">
-        <div className="col-9">
+        <div className="col-9 ">
           <form onSubmit={handleSubmit}>
             <input
               type="text"
@@ -66,10 +67,8 @@ export default function ChatBox({ channel, userId }) {
               value={sendMessage}
               onChange={(e) => setSendMessage(e.target.value)}
             />
+            <button className="btn btn-primary">send</button>
           </form>
-        </div>
-        <div className="col-3">
-          <button className="btn btn-primary">send</button>
         </div>
       </div>
     </div>
