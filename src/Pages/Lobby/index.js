@@ -11,6 +11,7 @@ export default function Lobby({ connectUser }) {
   const userId = connectUser.me.id;
   const [channels, setChannels] = useState(null);
   const [channel, setChannel] = useState(null);
+  // const [makeItRender, setmakeItRender] = useState("");
 
   useEffect(() => {
     // The default queryChannels API returns channels and starts watching them.

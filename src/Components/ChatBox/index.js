@@ -1,23 +1,28 @@
 import { useState, useEffect } from "react";
 import moment from "moment";
 
-export default function ChatBox({ channel, userId }) {
+export default function ChatBox({ setmakeItRender, channel, userId }) {
   const [sendMessage, setSendMessage] = useState("");
   const [messages, setMessages] = useState(channel.state.messages);
   const [event, setEvent] = useState("");
 
   // Set messages at first render and every time channel changes.
   useEffect(() => {
-    setMessages(channel.state.messages);
     console.log("Loading channel messages...");
+    setMessages(channel.state.messages);
+    console.log("Cleaning unread messages");
+    channel.markRead();
   }, [channel]);
 
   // Subscribe to listen events type: "new message" on channels
   useEffect(() => {
+    console.log(`Listening on channel: ${channel.cid}`);
+
     channel.on("message.new", (event) => {
       // console.log("what's event.cid?", event.cid);
       // console.log("what's event channel.cid?", channel.cid);
       setEvent(event);
+      // setmakeItRender(event);
     });
   }, [messages]);
 
