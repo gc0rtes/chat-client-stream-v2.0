@@ -4,19 +4,30 @@ import moment from "moment";
 export default function ChatBox({ channel, userId }) {
   const [sendMessage, setSendMessage] = useState("");
   const [messages, setMessages] = useState(channel.state.messages);
+  const [event, setEvent] = useState("");
 
   // Set messages at first render and every time channel changes.
   useEffect(() => {
     setMessages(channel.state.messages);
+    console.log("Loading channel messages...");
   }, [channel]);
 
-  // Start to listen Events (new.message) on channel.
-  // It doesn't makes an API call.
+  // Subscribe to listen events type: "new message" on channels
   useEffect(() => {
     channel.on("message.new", (event) => {
-      setMessages([...messages, event.message]);
+      // console.log("what's event.cid?", event.cid);
+      // console.log("what's event channel.cid?", channel.cid);
+      setEvent(event);
     });
-  }, [messages]); // monitoring messages to run it everytime it changes.
+  }, [messages]);
+
+  // Check if the event is related to the current channel
+  useEffect(() => {
+    if (event.cid === channel.cid) {
+      console.log("same channel, update messages!");
+      setMessages([...messages, event.message]);
+    }
+  }, [event]);
 
   // Function to sending messages. It makes an API call.
   const toSendMessage = async (message) => {
@@ -33,6 +44,10 @@ export default function ChatBox({ channel, userId }) {
     toSendMessage(sendMessage);
     setSendMessage("");
   };
+
+  // console.log("chatbox render");
+  // console.log("what's channel.cid?", channel.cid);
+  // console.log("what's event?", event);
 
   return (
     <div className="col-9 border">

@@ -1,4 +1,5 @@
 export default function ChatList({ channels, setChannel }) {
+  console.log("chatlist render");
   return (
     <div className="col-3 p-2 border" style={{ height: "100%" }}>
       <h3>Channel list</h3>
