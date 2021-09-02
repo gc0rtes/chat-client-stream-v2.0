@@ -2,7 +2,7 @@ import "./index.css";
 import { useState } from "react";
 
 // Functions
-import { getTokenAndConnectUser } from "../../Components/getTokenAndConnectUser";
+import { getTokenAndConnectUser } from "../../Utils/getTokenAndConnectUser";
 
 export default function Login({ setConnectUser }) {
   const [userId, setUserId] = useState("");

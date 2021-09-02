@@ -5,7 +5,7 @@ import ChatList from "../../Components/ChatList/ChatList";
 import ChatBox from "../../Components/ChatBox/ChatBox";
 
 // Functions
-import { queryChannels } from "../../Components/queryChannels";
+import { queryChannels } from "../../Utils/queryChannels";
 
 export default function Lobby({ connectUser }) {
   const userId = connectUser.me.id;
