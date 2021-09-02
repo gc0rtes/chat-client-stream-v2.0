@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
 // Components
-import ChatList from "../../Components/ChatList";
-import ChatBox from "../../Components/ChatBox";
+import ChatList from "../../Components/ChatList/ChatList";
+import ChatBox from "../../Components/ChatBox/ChatBox";
 
 // Functions
 import { queryChannels } from "../../Components/queryChannels";

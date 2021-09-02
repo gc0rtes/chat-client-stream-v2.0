@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 export default function ChatList({ channels, setChannel }) {
   const [makeItRender, setmakeItRender] = useState("");
 
-  console.log("chatlist render");
-  console.log("channels", channels);
+  // console.log("channels", channels);
   // console.log("makeItRender", makeItRender);
 
   useEffect(() => {
@@ -25,8 +24,15 @@ export default function ChatList({ channels, setChannel }) {
             key={index}
             onClick={() => setChannel(channel)}
           >
-            <h6> {channel.id}</h6>
-            <h6>{channel.state.unreadCount}</h6>
+            <div style={{ fontSize: "14px" }}> {channel.id}</div>
+            <div style={{ fontSize: "10px" }}>{channel.state.unreadCount}</div>
+            <div style={{ fontSize: "10px" }}>
+              (
+              {channel.state.messages[
+                channel.state.messages.length - 1
+              ].text.substring(0, 10)}
+              )
+            </div>
           </div>
         ))}
       </div>

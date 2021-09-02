@@ -29,6 +29,8 @@ export default function ChatBox({ setmakeItRender, channel, userId }) {
   // Check if the event is related to the current channel
   useEffect(() => {
     if (event.cid === channel.cid) {
+      console.log("Cleaning unread messages");
+      channel.markRead();
       console.log("same channel, update messages!");
       setMessages([...messages, event.message]);
     }
@@ -58,7 +60,8 @@ export default function ChatBox({ setmakeItRender, channel, userId }) {
     <div className="col-9 border">
       {/* Load messages box*/}
       <div className="border  p-2" style={{ height: "93%" }}>
-        <h3>Channel #{channel.id}</h3>
+        <h3> #{channel.id}</h3>
+        <h6>Watchers {channel.state.watcher_count}</h6>
 
         {messages.map((message, index) => (
           <div
@@ -83,11 +86,10 @@ export default function ChatBox({ setmakeItRender, channel, userId }) {
             <input
               type="text"
               className="form-control"
-              placeholder="type your message"
+              placeholder="type your message..."
               value={sendMessage}
               onChange={(e) => setSendMessage(e.target.value)}
             />
-            <button className="btn btn-primary">send</button>
           </form>
         </div>
       </div>
