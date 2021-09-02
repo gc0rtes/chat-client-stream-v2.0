@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import Lobby from "./Pages/Lobby";
-import Login from "./Pages/Login";
+import Lobby from "./Pages/Lobby/Lobby";
+import Login from "./Pages/Login/Login";
 
 function App() {
   const [connectUser, setConnectUser] = useState(null);

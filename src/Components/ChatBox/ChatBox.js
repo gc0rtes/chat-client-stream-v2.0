@@ -1,29 +1,36 @@
 import { useState, useEffect } from "react";
 import moment from "moment";
 
-export default function ChatBox({ channel, userId }) {
+export default function ChatBox({ setmakeItRender, channel, userId }) {
   const [sendMessage, setSendMessage] = useState("");
   const [messages, setMessages] = useState(channel.state.messages);
   const [event, setEvent] = useState("");
 
   // Set messages at first render and every time channel changes.
   useEffect(() => {
-    setMessages(channel.state.messages);
     console.log("Loading channel messages...");
+    setMessages(channel.state.messages);
+    console.log("Cleaning unread messages");
+    channel.markRead();
   }, [channel]);
 
   // Subscribe to listen events type: "new message" on channels
   useEffect(() => {
+    console.log(`Listening on channel: ${channel.cid}`);
+
     channel.on("message.new", (event) => {
       // console.log("what's event.cid?", event.cid);
       // console.log("what's event channel.cid?", channel.cid);
       setEvent(event);
+      // setmakeItRender(event);
     });
   }, [messages]);
 
   // Check if the event is related to the current channel
   useEffect(() => {
     if (event.cid === channel.cid) {
+      console.log("Cleaning unread messages");
+      channel.markRead();
       console.log("same channel, update messages!");
       setMessages([...messages, event.message]);
     }
@@ -53,7 +60,8 @@ export default function ChatBox({ channel, userId }) {
     <div className="col-9 border">
       {/* Load messages box*/}
       <div className="border  p-2" style={{ height: "93%" }}>
-        <h3>Channel #{channel.id}</h3>
+        <h3> #{channel.id}</h3>
+        <h6>Watchers {channel.state.watcher_count}</h6>
 
         {messages.map((message, index) => (
           <div
@@ -78,11 +86,10 @@ export default function ChatBox({ channel, userId }) {
             <input
               type="text"
               className="form-control"
-              placeholder="type your message"
+              placeholder="type your message..."
               value={sendMessage}
               onChange={(e) => setSendMessage(e.target.value)}
             />
-            <button className="btn btn-primary">send</button>
           </form>
         </div>
       </div>
