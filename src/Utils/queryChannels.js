@@ -25,9 +25,9 @@ export const queryChannels = async (setChannel, setChannels, userId) => {
     const sort = { last_message_at: -1 };
 
     const result = await chatClient.queryChannels(filter, sort);
+    // console.log("queryChannels called");
     setChannels(result);
     setChannel(result[0]);
-    // console.log("what is resul[0]", result[0]);
   } catch (error) {
     console.log("query channels failed", error);
   }

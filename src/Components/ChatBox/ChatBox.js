@@ -5,6 +5,7 @@ export default function ChatBox({ setmakeItRender, channel, userId }) {
   const [sendMessage, setSendMessage] = useState("");
   const [messages, setMessages] = useState(channel.state.messages);
   const [event, setEvent] = useState("");
+  const [watchers, setWatchers] = useState(null);
 
   // Set messages at first render and every time channel changes.
   useEffect(() => {
@@ -14,9 +15,14 @@ export default function ChatBox({ setmakeItRender, channel, userId }) {
     channel.markRead();
   }, [channel]);
 
+  useEffect(() => {
+    console.log("Starting count users online");
+    setWatchers(channel.state.watcher_count + 1);
+  }, []);
+
   // Subscribe to listen events type: "new message" on channels
   useEffect(() => {
-    console.log(`Listening on channel: ${channel.cid}`);
+    console.log(`Start to listening new messages on channel: ${channel.cid}`);
 
     channel.on("message.new", (event) => {
       // console.log("what's event.cid?", event.cid);
@@ -25,6 +31,21 @@ export default function ChatBox({ setmakeItRender, channel, userId }) {
       // setmakeItRender(event);
     });
   }, [messages]);
+
+  useEffect(() => {
+    // Users online
+    channel.on((event) => {
+      console.log("what's event", event);
+      console.log("what's channel", channel);
+      if (
+        event.type === "user.watching.start" ||
+        event.type === "user.watching.stop"
+      ) {
+        console.log("User online updated!");
+        setWatchers(event.watcher_count);
+      }
+    });
+  }, [channel]);
 
   // Check if the event is related to the current channel
   useEffect(() => {
@@ -55,13 +76,15 @@ export default function ChatBox({ setmakeItRender, channel, userId }) {
   // console.log("chatbox render");
   // console.log("what's channel.cid?", channel.cid);
   // console.log("what's event?", event);
+  console.log("what's watchers?", watchers);
+  console.log("actual chanel watchers", channel.state.watcher_count);
 
   return (
     <div className="col-9 border">
       {/* Load messages box*/}
       <div className="border  p-2" style={{ height: "93%" }}>
         <h3> #{channel.id}</h3>
-        <h6>Watchers {channel.state.watcher_count}</h6>
+        <h6> {watchers ? `Users online ${watchers}` : null}</h6>
 
         {messages.map((message, index) => (
           <div
